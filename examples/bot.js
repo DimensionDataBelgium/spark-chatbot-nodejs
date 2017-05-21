@@ -55,7 +55,9 @@ function parseCommand(spark,command, message) {
                  break;
             case 'about' :
                 // Check usage
-                sendMessage(command.message.roomId,"\nauthor:Jeff De Graef (jeff.degraef@dimensiondata.com) \n\ncode:https://github.com/ObjectIsAdvantag/sparkbot-webhook-samples/blob/master/examples/room-stats.js \n\ndescription:computes the top contributors in a spark room \n\nhealthcheck:GET https://sparkbot-room-stats.herokuapp.com \n\nwebhook:POST https://sparkbot-room-stats.herokuapp.com \n\n","WARNING: could not Hello message to room: " + command.message.roomId,true);
+                sendMessage(command.message.roomId,"\nauthor:Jeff De Graef (jeff.degraef@dimensiondata.com) \n\n" +
+                    "code:https://github.com/DimensionDataBelgium/spark-chatbot-nodejs \n\n" +
+                    "description:DD bot written in NodeJS \n\n","WARNING: could not Hello message to room: " + command.message.roomId,true);
                 break;
             case 'aa' :
                 // let's acknowledge we received the order
