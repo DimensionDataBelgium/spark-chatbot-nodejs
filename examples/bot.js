@@ -55,7 +55,7 @@ function parseCommand(spark,command, message) {
                  break;
             case 'pushcontent' :
                 // Check usage
-                functions.pushContent(spark);
+                functions.pushContent(spark,command.message.personEmail);
                 break;
             case 'whoami' :
                  // Check usage

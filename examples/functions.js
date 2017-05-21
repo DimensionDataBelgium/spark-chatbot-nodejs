@@ -109,17 +109,18 @@ module.exports.listWebhooks = function(spark) {
 
 }
 
-module.exports.pushContent = function(spark) {
+module.exports.pushContent = function(spark,personEmail) {
 
     messageParams = {}  // Message Parameters are optional
     messageParams.file = 'http://www.dimensiondata.com/Global/Downloadable%20Documents/Unified%20Communications%20and%20Collaboration%20Development%20Model%20Brochure.pdf'  // The file to attach to the message.
     messageParams.filename = 'Unified Communications and Collaboration Development Model'
+    messageParams.markdown = 'markdown'
 
-//To set the type of your messageText to HTML or Markdown set messageParams.html messageParams.markdown to true.  If both are set, message will be sent as markdown.
-//messageParams.html = true
+    //To set the type of your messageText to HTML or Markdown set messageParams.html messageParams.markdown to true.  If both are set, message will be sent as markdown.
+    //messageParams.html = true
 
-// for a direct 1:1 message just use the users email address as the first parameter or person id
-    spark.createMessage('jozef.degraef@dimensiondata.com', 'Hello!', messageParams, function(err, response) {
+    // for a direct 1:1 message just use the users email address as the first parameter or person id
+    spark.createMessage(personEmail, '_Message push dear sir, hope you like it!!_', messageParams, function(err, response) {
         if (!err)
             console.dir(response.id)
     })
