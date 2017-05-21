@@ -3,7 +3,7 @@
  */
 var portfolio = require("./portfolio");
 
-export function parseCommand(spark, command, message) {
+module.exports.parseCommand = function(spark, command, message) {
     console.log("PARSING");
     switch(command.keyword)
          {
@@ -54,7 +54,7 @@ export function parseCommand(spark, command, message) {
 }
 
 
-export function sendMessage(spark, roomID,messageText, errormessage, markdown) {
+module.exports.sendMessage = function(spark, roomID,messageText, errormessage, markdown) {
 
 
     console.log("In function sendMessage: " + messageText);
@@ -66,3 +66,72 @@ export function sendMessage(spark, roomID,messageText, errormessage, markdown) {
                         });
 
 }
+
+module.exports.sdcontact = function(bot, trigger) {
+    // Open a Spark room with SD team
+    var tosay = '';
+    var Spark = require('node-sparky');
+    var spark = new Spark(process.env['SPARK_TOKEN']);
+
+    room = spark.roomAdd(config.SD.roomtitle)
+        .then(function(room) {
+            memberroom = spark.membershipAdd(room.id, config.SD.email, '0')
+                .then(function(room) { bot.say('* Membership added with '+config.SD.email); })
+                .catch(function(err) { bot.say('* Error during membership'); console.log(err); });
+            memberroom = spark.membershipAdd(room.id, trigger.personEmail, '0')
+                .then(function(room) { bot.say('* Membership addded with '+trigger.personEmail); })
+                .catch(function(err) { bot.say('* Error during membership'); console.log(err); });
+            bot.say('* Room "'+room.title+'" created');
+        })
+        .catch(function(err) { bot.say('* Error during room creation'); console.log(err); });
+    bot.say(config.SD.roommsg);
+}
+
+module.exports.listWebhooks = function(spark) {
+
+    spark.listWebhooks(5, function(err, webhooks) {
+        if (!err)
+            for (i=0;i<webhooks.items.length;i++) {
+                console.log(webhooks.items[i].id)
+                console.log(webhooks.items[i].name)
+                console.log(webhooks.items[i].resource)
+                console.log(webhooks.items[i].event)
+                console.log(webhooks.items[i].targetUrl)
+                console.log(webhooks.items[i].filter)
+            }
+        //support for pagination
+        spark.listWebhooks("next",function(err,webhooks){
+            // do something here
+        })
+
+
+    })
+
+}
+
+module.exports.pushContent = function(spark) {
+
+    messageParams = {}  // Message Parameters are optional
+    messageParams.file = 'http://www.dimensiondata.com/Global/Downloadable%20Documents/Unified%20Communications%20and%20Collaboration%20Development%20Model%20Brochure.pdf'  // The file to attach to the message.
+    messageParams.filename = 'Unified Communications and Collaboration Development Model'
+
+//To set the type of your messageText to HTML or Markdown set messageParams.html messageParams.markdown to true.  If both are set, message will be sent as markdown.
+//messageParams.html = true
+
+// for a direct 1:1 message just use the users email address as the first parameter or person id
+    spark.createMessage('jozef.degraef@dimensiondata.com', 'Hello!', messageParams, function(err, response) {
+        if (!err)
+            console.dir(response.id)
+    })
+
+// or send to a room by using the room id as the first parameter
+//     sparkClient.createMessage('Y2lzY29zcGFyazovL3VzL1JPT00vZjcwZjQ0ODAtYTA1Ny0xMWU1LTg4MTktODNkODA5ZDZlZjc2', 'Hello!', messageParams, function(err, response) {
+//         if (!err)
+//             console.dir(response.id)
+//     })
+
+}
+
+
+
+

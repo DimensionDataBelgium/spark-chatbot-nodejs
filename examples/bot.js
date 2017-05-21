@@ -10,6 +10,7 @@ process.env['SPARK_TOKEN'] = "ZTQ4YWVhM2ItMTk4MC00YTU0LWJmNGYtMzVlOTg0OTc0MzkwYW
 console.log("Launching BOT with TOKEN: " + process.env.SPARK_TOKEN);
 //import {parseCommand, sendMessage} from './functions';
 var portfolio = require("./portfolio");
+var functions = require("./functions");
 var SparkBot = require("node-sparkbot");
 var bot = new SparkBot();
 //bot.interpreter.prefix = "#"; // Remove comment to overlad default / prefix to identify bot commands
@@ -39,6 +40,9 @@ function parseCommand(spark,command, message) {
                  var email = command.message.personEmail; // Spark User that created the message orginally
                  sendMessage(command.message.roomId,"Just a little test my good friend <@personEmail:" + email + ">","WARNING: could not post Hello message to room: " + command.message.roomId,true);
                  break;
+             case 'markup':
+                sendMessage(command.message.roomId,"```shgulp watch","WARNING: could not post Hello message to room: " + command.message.roomId,true);
+                break;
             case 'color' :
                 sendMessage(command.message.roomId,"> Item sqdfsdfdsf  qsdfqsdfqsdfqs sqdfsqfqsdf qsdfqsdfsqdfqsdfqsdf qsdfqsdfqsfqsdf","WARNING: could not post message to room: " + command.message.roomId,true);
                  break;
@@ -49,16 +53,20 @@ function parseCommand(spark,command, message) {
                  var email = command.message.personEmail; // Spark User that created the message orginally
                 sendMessage(command.message.roomId,"Hello <@personEmail:" + email + ">","WARNING: could not Hello message to room: " + command.message.roomId,true);
                  break;
+            case 'pushcontent' :
+                // Check usage
+                functions.pushContent(spark);
+                break;
             case 'whoami' :
                  // Check usage
                 sendMessage(command.message.roomId,"Hi there\n\n Your Person Id is: " + command.message.personId + "\n\nYour email is: " + command.message.personEmail,"WARNING: could not Hello message to room: " + command.message.roomId,true);
                  break;
             case 'about' :
-                // Check usage
-                sendMessage(command.message.roomId,"\nauthor:Jeff De Graef (jeff.degraef@dimensiondata.com) \n\n" +
-                    "code:https://github.com/DimensionDataBelgium/spark-chatbot-nodejs \n\n" +
-                    "description:DD bot written in NodeJS \n\n","WARNING: could not Hello message to room: " + command.message.roomId,true);
+                functions
                 break;
+        case 'getwebhooks' :
+            functions.listWebhooks(spark);
+            break;
             case 'aa' :
                 // let's acknowledge we received the order
                 sendMessage(command.message.roomId,"_heard you! asking my crystal ball..._","WARNING: could not ask crystal ball",true);
@@ -92,6 +100,7 @@ function sendMessage(roomID,messageText, errormessage, markdown)
 
 {
     console.log("In function sendMessage: " + messageText);
+
     spark.createMessage(roomID, messageText, {"markdown": markdown}, function (err, message) {
                             if (err) {
                                 console.log(errormessage);
