@@ -112,6 +112,13 @@ module.exports.listWebhooks = function(spark) {
 module.exports.pushContent = function(spark,personEmail) {
 
     messageParams = {}  // Message Parameters are optional
+    messageParams.markdown = 'markdown'
+    spark.createMessage(personEmail, '_heard you! asking my crystal ball..._',messageParams , function(err, response) {
+        if (!err)
+            console.dir(response.id)
+    })
+
+    messageParams = {}  // Message Parameters are optional
     messageParams.file = 'http://www.dimensiondata.com/Global/Downloadable%20Documents/Unified%20Communications%20and%20Collaboration%20Development%20Model%20Brochure.pdf'  // The file to attach to the message.
     messageParams.filename = 'Unified Communications and Collaboration Development Model'
     messageParams.markdown = 'markdown'
